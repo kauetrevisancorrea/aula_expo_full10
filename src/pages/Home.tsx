@@ -17,11 +17,8 @@ export default function HomePage() {
         userService.getList().then(data => setUsers(data))
     }
 
-    useFocusEffect(() => {
-        fetchUsers()
-    })
-
     React.useEffect(() => {
+        navigation.addListener('focus', fetchUsers);
         authRepo.getSession().then(session => {
             if (!session) navigation.goBack()
 

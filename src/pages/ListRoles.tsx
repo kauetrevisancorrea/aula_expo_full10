@@ -15,13 +15,11 @@ export default function RolesPage() {
 
     function fetchRoles() {
         rolesService.getList().then(data => setRoles(data))
+        console.log('roles', roles);
     }
 
-    useFocusEffect(() => {
-        fetchRoles()
-    })
-
     React.useEffect(() => {
+        navigation.addListener('focus', fetchRoles);
         authRepo.getSession().then(session => {
             if (!session) navigation.goBack()
 
