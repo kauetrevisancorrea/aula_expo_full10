@@ -1,24 +1,24 @@
 import React from 'react'
-import { Alert, Button, FlatList, StyleSheet, Text, View } from 'react-native'
+import { Button, FlatList, StyleSheet, Text, View } from 'react-native'
 import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native'
-
-import * as userService from '../services/user.service'
 import * as authRepo from '../services/auth.repo'
-import ListItem from '../components/ListItem'
-import { User } from '../model'
 
-export default function HomePage() {
+import * as rolesService from '../services/roles.service'
+import ListItem from '../components/ListItem'
+import { Role } from '../model'
+
+export default function RolesPage() {
 
     const navigation = useNavigation<NavigationProp<any>>()
 
-    const [users, setUsers] = React.useState<Array<User>>([])
+    const [roles, setRoles] = React.useState<Array<Role>>([])
 
-    function fetchUsers() {
-        userService.getList().then(data => setUsers(data))
+    function fetchRoles() {
+        rolesService.getList().then(data => setRoles(data))
     }
 
     useFocusEffect(() => {
-        fetchUsers()
+        fetchRoles()
     })
 
     React.useEffect(() => {
@@ -31,37 +31,34 @@ export default function HomePage() {
         })
 
         navigation.setOptions({
-            headerLeft: () => <Button title='Sair' onPress={() => navigation.goBack()} />,
-            headerRight: () => <View style={{ flexDirection: 'row', gap: 8 }}>
-                <Button title='Roles' onPress={() => navigation.navigate('roles')} />
-                <Button title='Add' onPress={() => navigation.navigate('user')} />
-            </View>
+            title: 'Roles',
+            headerRight: () => <Button title='Add' onPress={() => navigation.navigate('role')} />
         })
     }, [])
 
-    function update(user: User) {
-        navigation.navigate('user', { user })
+    function update(role: Role) {
+        navigation.navigate('role', { role })
     }
 
-    function remove(user: User) {
-        userService.remove(user.id!).then(deleted => {
-            if (deleted) fetchUsers()
+    function remove(role: Role) {
+        rolesService.remove(role.id!).then(deleted => {
+            if (deleted) fetchRoles()
         })
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Listagem de Usuários</Text>
-            <Text>{users.length} usuários cadastrados.</Text>
+            <Text style={styles.title}>Listagem de Roles</Text>
+            <Text>{roles.length} roles cadastradas.</Text>
 
             <View>
                 <FlatList
-                    data={users}
-                    keyExtractor={user => user.id!.toString()}
+                    data={roles}
+                    keyExtractor={role => role.id!.toString()}
                     renderItem={({ item }) => (
                         <ListItem
                             title={item.name}
-                            subtitle={item.username}
+                            subtitle={item.description || 'Sem descrição'}
                             onUpdate={() => update(item)}
                             onDelete={() => remove(item)}
                         />
@@ -85,7 +82,4 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         fontWeight: 'bold',
     },
-    button: {
-        padding: 4
-    }
 })

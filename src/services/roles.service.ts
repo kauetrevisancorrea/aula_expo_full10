@@ -1,7 +1,7 @@
 import * as repo from '../services/auth.repo'
-import { User } from "../model";
+import { Role } from "../model";
 
-const URL = 'http://192.168.15.5:3030/users';
+const URL = 'http://192.168.15.5:3030/roles';
 
 async function getHeaders() {
     const session = await repo.getSession();
@@ -19,45 +19,45 @@ export async function getList() {
     })
 
     if (response.ok) {
-        return await response.json() as User[];
+        return await response.json() as Role[];
     }
     throw new Error(await response.text())
 }
 
-export async function getById(id: number) {
+export async function getById(id: string) {
     const response = await fetch(`${URL}/${id}`, {
         method: 'GET',
         headers: await getHeaders(),
     })
 
     if (response.ok) {
-        return await response.json() as User;
+        return await response.json() as Role;
     }
     throw new Error(await response.text())
 }
 
-export async function create(user: User) {
+export async function register(role: Role) {
     const response = await fetch(URL, {
         method: 'POST',
         headers: await getHeaders(),
-        body: JSON.stringify(user),
+        body: JSON.stringify(role),
     })
 
     if (response.ok) {
-        return await response.json() as User;
+        return await response.json() as Role;
     }
     throw new Error(await response.text())
 }
 
-export async function update(user: User) {
-    const response = await fetch(`${URL}/${user.id}`, {
+export async function update(role: Role) {
+    const response = await fetch(`${URL}/${role.id}`, {
         method: 'PUT',
         headers: await getHeaders(),
-        body: JSON.stringify(user),
+        body: JSON.stringify(role),
     })
 
     if (response.ok) {
-        return await response.json() as User;
+        return await response.json() as Role;
     }
     throw new Error(await response.text())
 }

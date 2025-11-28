@@ -6,3 +6,9 @@ export interface User {
     roles?: string[];
     token?: string;
 }
+
+export interface Role {
+    id?: number;
+    name: string;
+    description: string;
+}

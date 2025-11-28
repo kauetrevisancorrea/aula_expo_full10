@@ -1,7 +1,7 @@
 import * as repo from '../services/auth.repo'
 import { User } from "../model";
 
-const URL = 'http://192.168.0.20:3030/auth';
+const URL = 'http://192.168.15.5:3030/auth';
 
 export async function login(username: string, password: string) {
 
